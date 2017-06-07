@@ -1,0 +1,12 @@
+{
+  "exclude": [
+    "node_modules",
+    "examples/**/*.test.ts"
+  ],
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "outDir": "./build",
+    "strict": true
+  }
+}

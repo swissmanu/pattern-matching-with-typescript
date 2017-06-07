@@ -1,0 +1,33 @@
+{
+  "name": "pattern-matching-with-typescript",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "jest",
+    "prettier": "prettier --write --single-quote examples/**/*.ts"
+  },
+  "author": "Manuel Alabor <manuel@alabor.me>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/jest": "^19.2.4",
+    "jest": "^20.0.4",
+    "prettier": "^1.4.2",
+    "typescript": "^2.3.4"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts)$": "<rootDir>/examples/util/ts-preprocessor.js"
+    },
+    "testMatch": [
+      "**/*.test.ts"
+    ]
+  }
+}
