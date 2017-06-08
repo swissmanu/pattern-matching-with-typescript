@@ -16,8 +16,4 @@ describe('switch: matchNumber', () => {
   it('should match 3 with "two"', () => {
     expect(matchNumber(3)).toBe('three');
   });
-
-  it('should match 4 with "4"', () => {
-    expect(matchNumber(4)).toBe('4');
-  });
 });
