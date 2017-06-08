@@ -17,7 +17,7 @@ You might think: *"Hey! That sounds like a `switch` statement to me!"*. And you 
 ## Match with Switch Statement
 
 ```typescript
-export function matchNumber(n: number): string {
+function matchNumber(n: number): string {
   switch (n) {
     case 1:
       return 'one';
@@ -30,7 +30,7 @@ export function matchNumber(n: number): string {
   }
 }
 
-export function randomNumber(): number {
+function randomNumber(): number {
   return Math.floor(Math.random() * (10 - 1) + 1); // Random number 1...10
 }
 
@@ -41,7 +41,7 @@ We can use a `switch` statement to map `number`s to its desired `string` represe
 
 Doing so is straight forward, though we can make out flaws for `matchNumber`:
 
-1. The *behaviour* for each case is baked into the `matchNumber` function. If you want to map `number`s to, lets say `boolean`s, you have to reimplement the complete `switch` block in another function.` 
+1. The *behaviour* for each case is baked into the `matchNumber` function. If you want to map `number`s to, lets say `boolean`s, you have to reimplement the complete `switch` block in another function.
 2. Requirements can be misinterpreted and behaviour for a case gets lost. What about `4`? What if a developer forgets about `default`?
    The possibility of bugs multiplies easily when the `switch` is reimplemented several times as described under point 1.
 
@@ -49,7 +49,7 @@ Trying to solve these flaws outlines requirements for an improved solution:
 
 1. Separate matching a specific *case* from its *behaviour*
 2. Make reuse of matcher simple to prevent bugs through duplicated code
-3. Implement matcher once
+3. Implement matcher once for different types
 
 ## Separation of Concerns
 
@@ -67,7 +67,7 @@ interface NumberPattern {
 Having `NumberPattern`, we can rebuild `matchNumber`:
 
 ```typescript
-export function matchNumber(p: NumberPattern): (n: number) => string {
+function matchNumber(p: NumberPattern): (n: number) => string {
   return (n: number): string => {
     switch (n) {
       case 1:
@@ -83,9 +83,9 @@ export function matchNumber(p: NumberPattern): (n: number) => string {
 }
 ```
 
-The new implementation consumes a `NumberPattern`. It returns a function which uses our `switch` block from before with an important difference: It does not map a `number` to a `string` on its own, it defers that job to the pattern initially given to `matchNumber`.
+The new implementation consumes a `NumberPattern`. It returns a function which uses our `switch` block from before with an important difference: It does no longer map a `number` to a `string` on its own, it delegates that job to the pattern initially given to `matchNumber`.
 
-Applying `NumberPattern` and the new `matchNumber` iteration to the example from the previous section results in the following code:
+Applying `NumberPattern` and the new `matchNumber`  to the task from the previous section results in the following code:
 
 ```typescript
 const match = matchNumber({
@@ -98,7 +98,7 @@ const match = matchNumber({
 console.log(match(randomNumber()))
 ```
 
-We clearly separated *case behaviours* from the matcher, so that first point can be ticked off. What preventing duplicate code and with that, improving maintainability of the matcher logic?
+We clearly separated *case behaviours* from the matcher. That first point can be ticked off. Does it further us from duplicating code and improve maintainability of the matcher?
 
 ```typescript
 const matchGerman = matchNumber({
@@ -111,42 +111,39 @@ const matchGerman = matchNumber({
 console.log(matchGerman(randomNumber()))
 ```
 
-Another tick! Because we have split concerns by introducing `NumberPattern`, changing behaviour without reimplementing the underlying matcher logic is straight forward.
+Another tick! Because we have split concerns by introducing `NumberPattern`, changing behavior without reimplementing the underlying matcher logic is straight forward.
 
+## Truly Reusable
 
-## Boolean Pattern
-
-Following code introduces an interface containing cases to handle possible values of the `boolean` type. Each case is a function which will return a `T`.
+Map a `number` to something different than a `string` still needs reimplementation of `matchNumber`. Can we solve this without doing so for each target type over and over again? Sure! [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) provide an elegant solution:
 
 ```typescript
-interface BooleanPattern<T> {
-  True: () => T,
-  False: () => T
+interface NumberPattern<T> {
+  One: () => T;
+  Two: () => T;
+  Three: () => T;
+  Other: (n: number) => T;
+}
+
+function matchNumber<T>(p: NumberPattern<T>): (n: number) => T {
+  return (n: number): T => {
+    // ...
+  };
 }
 ```
 
-The `BooleanPattern` allows us to describe specific behaviours for each possible case.
-
-Following `matchBoolean` function takes such behaviour description and returns a matcher. function which then will execute the *matching* case by
+Introducing the generic type parameter `T` makes `NumberPattern` and `matchNumber` truly reusable: It can map a `number` to any other type now. For example a `boolean`:
 
 ```typescript
-function matchBoolean<T>(p: BooleanPattern): (b: boolean) => T {
-  return (b: boolean) => {
-    if (b) {
-      return p.True();
-    }
-    return p.False();
-  }
-}
+const isLargerThanThree = matchNumber({
+  One: () => false,
+  Two: () => false,
+  Three: () => false,
+  Other: n => n > 3
+});
+
+console.log(isLargerThanThree(100));
+console.log(isLargerThanThree(1));
 ```
 
-This could be used:
-
-```typescript
-const loggedIn: boolean = await isUserLoggedIn();
-const result = matchBoolean({
-  True: () => 'User is logged in',
-  False: () => 'User is logged out'
-})(loggedIn);
-```
-
+This fulfills the last point in our requirement list to implement the matcher once for different types. The final example will probably never make it to production code, though it demonstrates the basic mechanic how a pattern and a corresponding matcher can be implemented in TypeScript.
