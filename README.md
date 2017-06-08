@@ -1,8 +1,8 @@
 # Pattern Matching with TypeScript
 
-TypeScript does not have any pattern matching functionality built in. This article shows several ways how you can replicate the core of a simple pattern matcher using a few simple structures and functions within TypeScript.
+[TypeScript](https://www.typescriptlang.org/index.html) does not have any pattern matching functionality built in. This article shows several ways how you can replicate the core of a simple pattern matcher using a few simple structures and functions within TypeScript.
 
-Done right, resulting code will have improved maintainability and better runtime type safety.
+Resulting code will have improved maintainability and better runtime type safety when done right.
 
 ## What is Pattern Matching?
 
@@ -147,3 +147,6 @@ console.log(isLargerThanThree(1));
 ```
 
 This fulfills the last point in our requirement list to implement the matcher once for different types. The final example will probably never make it to production code, though it demonstrates the basic mechanic how a pattern and a corresponding matcher can be implemented in TypeScript.
+
+## Matching Union Types
+
