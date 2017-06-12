@@ -8,9 +8,9 @@ Resulting code will have improved maintainability and better runtime type safety
 
 Pattern matching is a fundamental and powerful building block to many functional programming languages like [Haskell](http://learnyouahaskell.com/syntax-in-functions) or [Scala](http://docs.scala-lang.org/tutorials/tour/pattern-matching.html).
 
-*TODO: Disclaimer: Language-Level Pattern matchers go further than what we build here… Though its a nice abstraction pattern to improve code maintainability*
+*TODO: Disclaimer: Language-Level Pattern matchers go further than what we build here… Though it's a nice abstraction pattern to improve code maintainability*
 
-A *pattern* can contain one or more *cases*. Each *case* describes *behaviour* which has to be applied once the *case* matches.
+A *pattern* can contain one or more *cases*. Each *case* describes *behavior* which has to be applied once the *case* matches.
 
 You might think: *"Hey! That sounds like a `switch` statement to me!"*. And you are right indeed:
 
@@ -39,21 +39,21 @@ console.log(matchNumber(randomNumber()));
 
 We can use a `switch` statement to map `number`s to its desired `string` representation.
 
-Doing so is straight forward, though we can make out flaws for `matchNumber`:
+Doing so is straightforward, though we can make out flaws for `matchNumber`:
 
-1. The *behaviour* for each case is baked into the `matchNumber` function. If you want to map `number`s to, lets say `boolean`s, you have to reimplement the complete `switch` block in another function.
-2. Requirements can be misinterpreted and behaviour for a case gets lost. What about `4`? What if a developer forgets about `default`?
+1. The *behavior* for each case is baked into the `matchNumber` function. If you want to map `number`s too, let's say `boolean`s, you have to reimplement the complete `switch` block in another function.
+2. Requirements can be misinterpreted and behavior for a case gets lost. What about `4`? What if a developer forgets about `default`?
    The possibility of bugs multiplies easily when the `switch` is reimplemented several times as described under point 1.
 
 Trying to solve these flaws outlines requirements for an improved solution:
 
-1. Separate matching a specific *case* from its *behaviour*
+1. Separate matching a specific *case* from its *behavior*
 2. Make reuse of matcher simple to prevent bugs through duplicated code
 3. Implement matcher once for different types
 
 ## Separation of Concerns
 
-Lets define an interface containing functions for each *case* we want be able to match. This allows to separate behaviour from actual matcher logic later.
+Let's define an interface containing functions for each *case* we want to be able to match. This allows separating behavior from actual matcher logic later.
 
 ```typescript
 interface NumberPattern {
@@ -98,7 +98,7 @@ const match = matchNumber({
 console.log(match(randomNumber()))
 ```
 
-We clearly separated *case behaviours* from the matcher. That first point can be ticked off. Does it further us from duplicating code and improve maintainability of the matcher?
+We clearly separated *case behaviors* from the matcher. That first point can be ticked off. Does it further duplicating code and improve maintainability of the matcher?
 
 ```typescript
 const matchGerman = matchNumber({
@@ -111,7 +111,7 @@ const matchGerman = matchNumber({
 console.log(matchGerman(randomNumber()))
 ```
 
-Another tick! Because we have split concerns by introducing `NumberPattern`, changing behavior without reimplementing the underlying matcher logic is straight forward.
+Another tick! Because we have split concerns by introducing `NumberPattern`, changing behavior without reimplementing the underlying matcher logic is straightforward.
 
 ## Truly Reusable
 
