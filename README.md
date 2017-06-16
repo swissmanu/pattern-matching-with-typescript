@@ -143,7 +143,9 @@ const isLargerThanThree = matchNumber({
 });
 
 console.log(isLargerThanThree(100));
+// results in true
 console.log(isLargerThanThree(1));
+// results in false
 ```
 
 This fulfills the last point in our requirement list to implement the matcher once for different types. The final example will probably never make it to production code, though it demonstrates the basic mechanic how a pattern and a corresponding matcher can be implemented in TypeScript.
