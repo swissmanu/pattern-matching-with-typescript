@@ -95,7 +95,7 @@ const match = matchNumber({
   Other: (n) => `${n}`
 });
 
-console.log(match(randomNumber()))
+console.log(match(randomNumber()));
 ```
 
 We clearly separated *case behaviors* from the matcher. That first point can be ticked off. Does it further duplicating code and improve maintainability of the matcher?
@@ -108,7 +108,7 @@ const matchGerman = matchNumber({
   Other: (n) => `${n}`
 });
 
-console.log(matchGerman(randomNumber()))
+console.log(matchGerman(randomNumber()));
 ```
 
 Another tick! Because we have split concerns by introducing `NumberPattern`, changing behavior without reimplementing the underlying matcher logic is straightforward.
@@ -150,3 +150,69 @@ This fulfills the last point in our requirement list to implement the matcher on
 
 ## Matching Union Types
 
+[Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) are a convenient way to model more sophisticated types. Knowing what specific type you are handling later on can be tedious though:
+
+```typescript
+type Argument = string | boolean;
+
+const a = 'Hello World';
+
+if (typeof a === 'string') {
+  // do string stuff
+} else if (typeof a === 'boolean') {
+  // do boolean stuff
+}
+```
+
+Let's assume I am lazy and desperately need that `if` block somewhere else too. I simply copy-and-paste the block and introduce successfully the first part of maintenance hell:
+
+A new requirement wants me to allow `number`s as argument in the application, so I modify the type definition of `Argument` accordingly and update *one* of the `if` blocks (because I already forgot about its twin):
+
+```typescript
+type Argument = string | boolean | number;
+
+// ...
+} else if (typeof a === 'number') {
+  // do number stuff
+}
+```
+
+The duplicated code with different type handling for `Argument` bears huge potential for runtime errors and undiscovered bugs.
+
+With the pattern matcher from the section before we already know a handy tool to defuse this situation. The  `ArgumentPattern` describes all possible *cases* when handle an `Argument` and the `matchArgument` matcher encapsulates the cumbersome code and makes it reusable:
+
+```typescript
+interface ArgumentPattern<T> {
+  String: (s: string) => T;
+  Boolean: (b: boolean) => T;
+  Number: (n: number) => T;
+}
+
+function matchArgument<T>(p: ArgumentPattern<T>): (a: Argument) => T {
+  return (a: Argument): T => {
+    if (typeof a === 'string') {
+      return p.String(a);
+    } else if (typeof a === 'boolean') {
+      return p.Boolean(a);
+    } else if (typeof a === 'number') {
+      return p.Number(a);
+    }
+
+    throw new Error(`matchArgument: Could not match type ${typeof a}`);
+  };
+}
+
+matchArgument({
+  String: (s) => console.log(`A string: ${s}`),
+  Boolean: (b) => console.log(`A boolean: ${b}`),
+  Number: (n) => console.log(`A number: ${n}`)
+})(a);  // results in "A string: Hello World"
+```
+
+The big advantage of this solution plays once we have to modify the `Argument` type again. As soon as the  `ArgumentPattern` is aligned, TypeScript will light up all code occurrences where we have to take action.
+
+This ensures consistent handling of a union type throughout the complete code base.
+
+## Credits
+
+// TODO: Proof reading and suggestions by @dbrack

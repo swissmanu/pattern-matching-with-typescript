@@ -1,4 +1,4 @@
-import {Bird, Dog, Pet} from './complex-union-types';
+import { Bird, Dog, Pet } from './complex-union-types';
 const noop = () => {};
 
 describe('Complex Union Types: PetPattern', () => {

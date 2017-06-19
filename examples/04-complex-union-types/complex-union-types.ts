@@ -6,7 +6,7 @@ interface PetPattern<T> {
 }
 
 interface PetMatcher {
-  match<T>(p: PetPattern<T>): T
+  match<T>(p: PetPattern<T>): T;
 }
 
 export class Dog implements PetMatcher {
