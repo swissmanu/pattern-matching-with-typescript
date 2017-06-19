@@ -1,7 +1,7 @@
-import {Bird, Dog, Pet} from './union-types';
+import {Bird, Dog, Pet} from './complex-union-types';
 const noop = () => {};
 
-describe('UnionTypes: PetPattern', () => {
+describe('Complex Union Types: PetPattern', () => {
   it('should match a Dog with Dog(dog)', () => {
     const dogSpy = jest.fn();
     const birdSpy = jest.fn();
