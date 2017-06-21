@@ -209,7 +209,7 @@ matchArgument({
 })(a);  // results in "A string: Hello World"
 ```
 
-The big advantage of this solution plays once we have to modify the `Argument` type again. Simply adapt  `ArgumentPattern` accordingly and TypeScript will light up all code occurrences where we have to take action. A consistent evaluation of a union type becomes much easier this way.
+The big advantage of this solution plays once I have to modify the `Argument` type again: I Simply adapt  `ArgumentPattern` accordingly and TypeScript will light up all code occurrences where action needs to be taken. A consistent evaluation of a union type becomes much easier this way.
 
 
 
