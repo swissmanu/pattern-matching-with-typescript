@@ -8,9 +8,9 @@ Resulting code will have improved maintainability and better runtime type safety
 
 Pattern matching is a fundamental and powerful building block to many functional programming languages like [Haskell](http://learnyouahaskell.com/syntax-in-functions) or [Scala](http://docs.scala-lang.org/tutorials/tour/pattern-matching.html).
 
-*TODO: Disclaimer: Language-Level Pattern matchers go further than what we build here… Though it's a nice abstraction pattern to improve code maintainability*
+We will not be able to replicate pattern matching on the level of sophistication as those languages provide. Though we can reuse the fundamental approach of pattern matching as inspiration to build something helpful in TypeScript.
 
-A *pattern* can contain one or more *cases*. Each *case* describes *behavior* which has to be applied once the *case* matches.
+Essentially a *pattern* can be defined as a thing describing one or more *cases*. Each *case* itself represents a specific *behavior* which has to be applied once the *case* matches.
 
 You might think: *"Hey! That sounds like a `switch` statement to me!"*. And you are right indeed:
 
@@ -209,9 +209,9 @@ matchArgument({
 })(a);  // results in "A string: Hello World"
 ```
 
-The big advantage of this solution plays once we have to modify the `Argument` type again. As soon as the  `ArgumentPattern` is aligned, TypeScript will light up all code occurrences where we have to take action.
+The big advantage of this solution plays once we have to modify the `Argument` type again. Simply adapt  `ArgumentPattern` accordingly and TypeScript will light up all code occurrences where we have to take action. A consistent evaluation of a union type becomes much easier this way.
 
-This ensures consistent handling of a union type throughout the complete code base.
+
 
 ## Credits
 
