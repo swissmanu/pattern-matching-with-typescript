@@ -41,13 +41,13 @@ console.log(matchNumber(randomNumber()));
 
 We can use a `switch` statement to map `number`s to its desired `string` representation.
 
-Doing so is straightforward, though we can make out flaws for `matchNumber`:
+Doing so is straightforward, but we can make out flaws for `matchNumber`:
 
-1. The *behavior* for each case is baked into the `matchNumber` function. If you want to map `number`s too, let's say `boolean`s, you have to reimplement the complete `switch` block in another function.
-2. Requirements can be misinterpreted and behavior for a case gets lost. What about `4`? What if a developer forgets about `default`?
+1. The *behavior* for each case is baked into the `matchNumber` function. You have to reimplement the complete `switch` block if you want to map to something else than a `string`, for example a `boolean`.
+2. Functional requirements can be misinterpreted and behavior for a case gets lost. What about `4`? What if a developer forgets about `default`?
    The possibility of bugs multiplies easily when the `switch` is reimplemented several times as described under point 1.
 
-Trying to solve these flaws outlines requirements for an improved solution:
+These flaws can be translated into a set of characteristics for a solution:
 
 1. Separate matching a specific *case* from its *behavior*
 2. Make reuse of matcher simple to prevent bugs through duplicated code
@@ -148,7 +148,7 @@ console.log(isLargerThanThree(100)); // results in true
 console.log(isLargerThanThree(1)); // results in false
 ```
 
-This fulfills the last point in our requirement list to implement the matcher once for different types. The final example will probably never make it to production code, though it demonstrates the basic mechanic how a pattern and a corresponding matcher can be implemented in TypeScript.
+This fulfills the last point in our requirement list to implement the matcher once for different types. The final example will probably never make it to production code but it demonstrates the basic mechanic how a pattern and a corresponding matcher can be implemented in TypeScript.
 
 ## Matching Union Types
 
