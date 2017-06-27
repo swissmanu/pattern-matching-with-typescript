@@ -36,7 +36,7 @@ function randomNumber(): number {
   return Math.floor(Math.random() * (10 - 1) + 1); // Random number 1...10
 }
 
-console.log(matchNumber(randomNumber()));
+const result = matchNumber(randomNumber()); // result === One, Two, Three or 4...10
 ```
 
 We can use a `switch` statement to map `number`s to its desired `string` representation.
@@ -97,7 +97,7 @@ const match = matchNumber({
   Other: (n) => `${n}`
 });
 
-console.log(match(randomNumber()));
+const result = match(randomNumber());  // result === One, Two, Three or 4...10
 ```
 
 We clearly separated *case behaviors* from the matcher. That first point can be ticked off. Does it further duplicating code and improve maintainability of the matcher?
@@ -110,7 +110,7 @@ const matchGerman = matchNumber({
   Other: (n) => `${n}`
 });
 
-console.log(matchGerman(randomNumber()));
+const result = matchGerman(randomNumber());  // result === Eins, Zwei, Drei or 4...10
 ```
 
 Another tick! Because we have split concerns by introducing `NumberPattern`, changing behavior without reimplementing the underlying matcher logic is straightforward.
@@ -144,8 +144,8 @@ const isLargerThanThree = matchNumber({
   Other: n => n > 3
 });
 
-console.log(isLargerThanThree(100)); // results in true
-console.log(isLargerThanThree(1)); // results in false
+const is100Larger = isLargerThanThree(100); // is100Larger === true
+const is1Larger = isLargerThanThree(1); // is1Larger === false
 ```
 
 This fulfills the last point in our requirement list to implement the matcher once for different types. The final example will probably never make it to production code but it demonstrates the basic mechanic how a pattern and a corresponding matcher can be implemented in TypeScript.
@@ -204,18 +204,59 @@ function matchArgument<T>(p: ArgumentPattern<T>): (a: Argument) => T {
   };
 }
 
-matchArgument({
+const result = matchArgument({
   String: (s) => console.log(`A string: ${s}`),
   Boolean: (b) => console.log(`A boolean: ${b}`),
   Number: (n) => console.log(`A number: ${n}`)
-})(a);  // results in "A string: Hello World"
+})(a);  // result === "A string: Hello World"
 ```
 
 The big advantage of this solution plays once I have to modify the `Argument` type again: I Simply adapt  `ArgumentPattern` accordingly and TypeScript will light up all code occurrences where action needs to be taken. A consistent evaluation of a union type becomes much easier this way.
 
 ## Match More Complex Types
 
-// TODO
+Following code is a simple start on the replication of Haskell's [Maybe monad](http://learnyouahaskell.com/a-fistful-of-monads) and uses pattern matching to provide access to the monads value.
+
+Various techniques introduced above are applied to a more complex type structure:
+
+```typescript
+type Maybe<T> = Just<T> | Nothing<T>;
+
+interface MaybePattern<T> {
+  Just: (v: T) => T;
+  Nothing: () => T;
+}
+
+interface MaybeMatcher {
+  match<T>(p: MaybePattern<T>): T;
+}
+
+class Just<T> implements MaybeMatcher {
+  constructor(private readonly value: T) {}
+
+  match(p: MaybePattern<T>): T {
+    return p.Just(this.value);
+  }
+}
+
+class Nothing<T> implements MaybeMatcher {
+  match(p: MaybePattern<T>): T {
+    return p.Nothing();
+  }
+}
+```
+
+You may notice the absence of a distinct `matchMaybe` function here.
+
+This slightly different approach uses the `MaybeMatcher` interface which gets implemented by each type on its own. Doing so prevents a set of cumbersome and potentially harmful `instanceof` compares within a dedicated matcher function and allows the invocation of matcher function directly on the concrete type:
+
+```typescript
+const just: Maybe<string> = new Just('Hello World');
+const result = just.match({
+  Just: (s) => `String: "${s}"`,
+  Nothing: () => 'There is no string'
+})); // result === 'String: "Hello World"'
+```
 
 ## Conclusion
 
