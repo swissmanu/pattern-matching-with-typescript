@@ -43,7 +43,7 @@ We can use a `switch` statement to map `number`s to its desired `string` represe
 
 Doing so is straightforward, but we can make out flaws for `matchNumber`:
 
-1. The *behavior* for each case is baked into the `matchNumber` function. You have to reimplement the complete `switch` block if you want to map to something else than a `string`, for example a `boolean`.
+1. The *behavior* for each case is baked into the `matchNumber` function. You have to reimplement the complete `switch` block if you want to map to something else than a `string`, for example, a `boolean`.
 2. Functional requirements can be misinterpreted and behavior for a case gets lost. What about `4`? What if a developer forgets about `default`?
    The possibility of bugs multiplies easily when the `switch` is reimplemented several times as described under point 1.
 
@@ -152,7 +152,7 @@ This fulfills the last point in our requirement list to implement the matcher on
 
 ## Matching Union Types
 
-[Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) are a convenient way to model more sophisticated types. Knowing what specific type you are handling later on can be tedious though:
+[Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) are a convenient way to model more sophisticated types. Knowing what specific type you are handling can be tedious though:
 
 ```typescript
 type Argument = string | boolean;
@@ -168,7 +168,7 @@ if (typeof a === 'string') {
 
 Let's assume I am lazy and desperately need that `if` block somewhere else too. I simply copy-and-paste the block and introduce successfully the first part of maintenance hell:
 
-A new requirement wants me to allow `number`s as argument in the application, so I modify the type definition of `Argument` accordingly and update *one* of the `if` blocks (because I already forgot about its twin):
+A new requirement wants me to allow `number`s as an argument in the application, so I modify the type definition of `Argument` accordingly and update *one* of the `if` blocks (because I already forgot about its twin):
 
 ```typescript
 type Argument = string | boolean | number;
@@ -181,7 +181,7 @@ type Argument = string | boolean | number;
 
 The duplicated code with different type handling for `Argument` bears huge potential for runtime errors and undiscovered bugs.
 
-With the pattern matcher from the section before we already know a handy tool to defuse this situation. The  `ArgumentPattern` describes all possible *cases* when handle an `Argument` and the `matchArgument` matcher encapsulates the cumbersome code and makes it reusable:
+With the pattern matcher from the section before we already know a handy tool to defuse this situation. The  `ArgumentPattern` describes all possible *cases* when handling an `Argument` and the `matchArgument` matcher encapsulates the cumbersome code and makes it reusable:
 
 ```typescript
 interface ArgumentPattern<T> {
@@ -260,8 +260,26 @@ const result = just.match({
 
 ## Conclusion
 
-// TODO
+The presented solution to bring pattern matching to TypeScript based applications is a powerful way to keep growing code bases better maintainable. It is a tool to keep code duplication low and keep conditions separated from actual behavior. Better readable code is an additional side effect.
+
+// TODO use example somewhere else
+
+```typescript
+const finalPaymentAmount: number = payment.match({
+  CreditCard: (co) => co.amount + (co.taxes * co.amount),
+  Debit: (do) => do.amount,
+  Cash: (co) => co.amount - co.cashDiscount
+});
+```
+
+I worked with these paradigms for quite some time up to today. After writing this article one thing is even more clear to me than before: To replicate pattern matching for a language like TypeScript means to introduce a lot of boilerplate code. And indeed this boilerplate can be overkill for small, simple applications.
+
+My personal experience proofs for myself that exactly that boilerplate can help to mitigate risks and potential bugs when a code base grows, developers hop on and off and requirements increase in their complexity.
+
+Pattern matching is no silver bullet for every evil like other patterns are neither. It might help you to keep your code cleaner and make changes in the type structure more secure. But it also means more technical complexity in the code.
+
+Add it to your toolbox and use it wisely 😊
 
 ## Credits
 
-// TODO: Proof reading and suggestions by @dbrack
+// TODO: Proofreading and suggestions by @dbrack
