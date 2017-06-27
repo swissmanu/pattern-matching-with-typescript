@@ -1,33 +1,33 @@
-import { Some, None, Optional } from './more-complex-types';
+import { Just, Nothing, Maybe } from './more-complex-types';
 const noop = () => {};
 
-describe('More Complex Types: OptionalPattern', () => {
-  it('should match a Some with Some(value)', () => {
-    const someSpy = jest.fn();
-    const noneSpy = jest.fn();
+describe('More Complex Types: MaybePattern', () => {
+  it('should match a Just with Just(value)', () => {
+    const justSpy = jest.fn();
+    const nothingSpy = jest.fn();
     const value = 'I have a value';
-    const optional: Optional<string> = new Some(value);
+    const maybe: Maybe<string> = new Just(value);
 
-    optional.match({
-      Some: someSpy,
-      None: noneSpy
+    maybe.match({
+      Just: justSpy,
+      Nothing: nothingSpy
     });
 
-    expect(someSpy).toHaveBeenCalledWith(value);
-    expect(noneSpy).not.toHaveBeenCalled();
+    expect(justSpy).toHaveBeenCalledWith(value);
+    expect(nothingSpy).not.toHaveBeenCalled();
   });
 
-  it('should match a None with None()', () => {
-    const someSpy = jest.fn();
-    const noneSpy = jest.fn();
-    const optional: Optional<string> = new None<string>();
+  it('should match a Nothing with Nothing()', () => {
+    const justSpy = jest.fn();
+    const nothingSpy = jest.fn();
+    const maybe: Maybe<string> = new Nothing<string>();
 
-    optional.match({
-      Some: someSpy,
-      None: noneSpy
+    maybe.match({
+      Just: justSpy,
+      Nothing: nothingSpy
     });
 
-    expect(someSpy).not.toHaveBeenCalled();
-    expect(noneSpy).toHaveBeenCalled();
+    expect(justSpy).not.toHaveBeenCalled();
+    expect(nothingSpy).toHaveBeenCalled();
   });
 });

@@ -1,24 +1,24 @@
-export type Optional<T> = Some<T> | None<T>;
+export type Maybe<T> = Just<T> | Nothing<T>;
 
-interface OptionalPattern<T> {
-  Some: (d: T) => T;
-  None: () => T;
+interface MaybePattern<T> {
+  Just: (v: T) => T;
+  Nothing: () => T;
 }
 
-interface OptionalMatcher {
-  match<T>(p: OptionalPattern<T>): T;
+interface MaybeMatcher {
+  match<T>(p: MaybePattern<T>): T;
 }
 
-export class Some<T> implements OptionalMatcher {
+export class Just<T> implements MaybeMatcher {
   constructor(private readonly value: T) {}
 
-  match(p: OptionalPattern<T>): T {
-    return p.Some(this.value);
+  match(p: MaybePattern<T>): T {
+    return p.Just(this.value);
   }
 }
 
-export class None<T> implements OptionalMatcher {
-  match(p: OptionalPattern<T>): T {
-    return p.None();
+export class Nothing<T> implements MaybeMatcher {
+  match(p: MaybePattern<T>): T {
+    return p.Nothing();
   }
 }
