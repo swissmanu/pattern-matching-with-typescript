@@ -274,12 +274,10 @@ const finalPaymentAmount: number = payment.match({
 
 I worked with these paradigms for quite some time up to today. After writing this article one thing is even more clear to me than before: To replicate pattern matching for a language like TypeScript means to introduce a lot of boilerplate code. And indeed this boilerplate can be overkill for small, simple applications.
 
-My personal experience proofs for myself that exactly that boilerplate can help to mitigate risks and potential bugs when a code base grows, developers hop on and off and requirements increase in their complexity.
+My personal experience proofs for myself that exactly this boilerplate can help to mitigate risks and potential bugs as a code base grows, developers hop on and off and requirements increase in their complexity.
 
-Pattern matching is no silver bullet for every evil like other patterns are neither. It might help you to keep your code cleaner and make changes in the type structure more secure. But it also means more technical complexity in the code.
-
-Add it to your toolbox and use it wisely 😊
+Similar to other ways of structuring code, pattern matching is no silver bullet either. Have it in your toolbox and apply it with care when the situation seems reasonable.
 
 ## Credits
 
-// TODO: Proofreading and suggestions by @dbrack
+> A huge "thank you" goes to [@dbrack](https://github.com/dbrack) and [@mweibel](https://github.com/mweibel) for proofreading and reviewing this article during its making. Thanks guys! ❤️
