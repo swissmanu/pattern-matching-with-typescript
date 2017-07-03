@@ -1,33 +1,51 @@
-import { Just, Nothing, Maybe } from './more-complex-types';
-const noop = () => {};
+import {
+  calculatePaymentAmount,
+  CashPayment,
+  CreditCardPayment,
+  Payment
+} from './more-complex-types';
 
-describe('More Complex Types: MaybePattern', () => {
-  it('should match a Just with Just(value)', () => {
-    const justSpy = jest.fn();
-    const nothingSpy = jest.fn();
-    const value = 'I have a value';
-    const maybe: Maybe<string> = new Just(value);
+const creditCardPayment = new CreditCardPayment(100, 0.02);
+const cashPayment = new CashPayment(100, 42);
 
-    maybe.match({
-      Just: justSpy,
-      Nothing: nothingSpy
+describe('More Complex Types:', () => {
+  describe('PaymentPattern', () => {
+    it('should match a CreditCardPayment with CreditCard(card)', () => {
+      const cardSpy = jest.fn();
+      const cashSpy = jest.fn();
+
+      creditCardPayment.match({
+        CreditCard: cardSpy,
+        Cash: cashSpy
+      });
+
+      expect(cardSpy).toHaveBeenCalledWith(creditCardPayment);
+      expect(cashSpy).not.toHaveBeenCalled();
     });
 
-    expect(justSpy).toHaveBeenCalledWith(value);
-    expect(nothingSpy).not.toHaveBeenCalled();
+    it('should match a CashPayment with Cash(cash)', () => {
+      const cardSpy = jest.fn();
+      const cashSpy = jest.fn();
+
+      cashPayment.match({
+        CreditCard: cardSpy,
+        Cash: cashSpy
+      });
+
+      expect(cardSpy).not.toHaveBeenCalled();
+      expect(cashSpy).toHaveBeenCalledWith(cashPayment);
+    });
   });
 
-  it('should match a Nothing with Nothing()', () => {
-    const justSpy = jest.fn();
-    const nothingSpy = jest.fn();
-    const maybe: Maybe<string> = new Nothing<string>();
-
-    maybe.match({
-      Just: justSpy,
-      Nothing: nothingSpy
+  describe('calculatePaymentAmount()', () => {
+    it('should add fees multiplied with amount to amount for credit card payments', () => {
+      const finalAmount = creditCardPayment.amount + (creditCardPayment.amount * creditCardPayment.fee);
+      expect(calculatePaymentAmount(creditCardPayment)).toEqual(finalAmount);
     });
 
-    expect(justSpy).not.toHaveBeenCalled();
-    expect(nothingSpy).toHaveBeenCalled();
+    it('should subtract discount from amount for cash payments', () => {
+      const finalAmount = cashPayment.amount - cashPayment.discount;
+      expect(calculatePaymentAmount(cashPayment)).toEqual(finalAmount);
+    });
   });
 });

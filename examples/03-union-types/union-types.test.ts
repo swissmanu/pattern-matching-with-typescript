@@ -1,5 +1,4 @@
 import { Argument, matchArgument } from './union-types';
-const noop = () => {};
 
 describe('Union Types: ArgumentPattern', () => {
   it('should match a string with String(string)', () => {
