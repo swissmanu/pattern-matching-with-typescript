@@ -204,11 +204,12 @@ function matchArgument<T>(p: ArgumentPattern<T>): (a: Argument) => T {
   };
 }
 
+const aString = 'Hello World';
 const result = matchArgument({
   String: (s) => console.log(`A string: ${s}`),
   Boolean: (b) => console.log(`A boolean: ${b}`),
   Number: (n) => console.log(`A number: ${n}`)
-})(a);  // result === "A string: Hello World"
+})(aString);  // result === "A string: Hello World"
 ```
 
 The big advantage of this solution plays once I have to modify the `Argument` type again: I Simply adapt  `ArgumentPattern` accordingly and TypeScript will light up all code occurrences where action needs to be taken. A consistent evaluation of a union type becomes much easier this way.
