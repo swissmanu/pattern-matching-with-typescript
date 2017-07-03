@@ -213,35 +213,44 @@ const result = matchArgument({
 
 The big advantage of this solution plays once I have to modify the `Argument` type again: I Simply adapt  `ArgumentPattern` accordingly and TypeScript will light up all code occurrences where action needs to be taken. A consistent evaluation of a union type becomes much easier this way.
 
-## Match More Complex Types
+## Solve a real life problem
 
 Following code is a simple start on the replication of Haskell's [Maybe monad](http://learnyouahaskell.com/a-fistful-of-monads) and uses pattern matching to provide access to the monads value.
 
 Various techniques introduced above are applied to a more complex type structure:
 
 ```typescript
-type Maybe<T> = Just<T> | Nothing<T>;
-
-interface MaybePattern<T> {
-  Just: (v: T) => T;
-  Nothing: () => T;
+interface PaymentPattern<T> {
+  CreditCard: (card: CreditCardPayment) => T;
+  Cash: (cash: CashPayment) => T;
 }
 
-interface MaybeMatcher {
-  match<T>(p: MaybePattern<T>): T;
+interface PaymentMatcher {
+  match<T>(p: PaymentPattern<T>): T;
 }
 
-class Just<T> implements MaybeMatcher {
-  constructor(private readonly value: T) {}
+abstract class Payment implements PaymentMatcher {
+  constructor(public readonly amount: number) {}
+  abstract match<T>(p: PaymentPattern<T>): T;
+}
 
-  match(p: MaybePattern<T>): T {
-    return p.Just(this.value);
+class CreditCardPayment extends Payment {
+  constructor(amount: number, public readonly fee: number) {
+    super(amount);
+  }
+
+  match<T>(p: PaymentPattern<T>): T {
+    return p.CreditCard(this);
   }
 }
 
-class Nothing<T> implements MaybeMatcher {
-  match(p: MaybePattern<T>): T {
-    return p.Nothing();
+class CashPayment extends Payment {
+  constructor(amount: number, public readonly discount: number) {
+    super(amount);
+  }
+
+  match<T>(p: PaymentPattern<T>): T {
+    return p.Cash(this);
   }
 }
 ```
@@ -251,28 +260,27 @@ You may notice the absence of a distinct `matchMaybe` function here.
 This slightly different approach uses the `MaybeMatcher` interface which gets implemented by each type on its own. Doing so prevents a set of cumbersome and potentially harmful `instanceof` compares within a dedicated matcher function and allows the invocation of matcher function directly on the concrete type:
 
 ```typescript
-const just: Maybe<string> = new Just('Hello World');
-const result = just.match({
-  Just: (s) => `String: "${s}"`,
-  Nothing: () => 'There is no string'
-})); // result === 'String: "Hello World"'
+function calculatePaymentAmount(payment: Payment) {
+  return payment.match({
+    CreditCard: card => card.amount + (card.amount * card.fee),
+    Cash: cash => cash.amount - cash.discount
+  });
+}
+
+const creditCardPayment = new CreditCardPayment(100, 0.02);
+const creditCardAmount = calculatePaymentAmount(creditCardPayment);
+// creditCardAmount === 102
+
+const cashPayment = new CashPayment(100, 2);
+const cashAmount = calculatePaymentAmount(cashPayment);
+// cashPayment === 98
 ```
 
 ## Conclusion
 
 The presented solution to bring pattern matching to TypeScript based applications is a powerful way to keep growing code bases better maintainable. It is a tool to keep code duplication low and keep conditions separated from actual behavior. Better readable code is an additional side effect.
 
-// TODO use example somewhere else
-
-```typescript
-const finalPaymentAmount: number = payment.match({
-  CreditCard: (co) => co.amount + (co.taxes * co.amount),
-  Debit: (do) => do.amount,
-  Cash: (co) => co.amount - co.cashDiscount
-});
-```
-
-I worked with these paradigms for quite some time up to today. After writing this article one thing is even more clear to me than before: To replicate pattern matching for a language like TypeScript means to introduce a lot of boilerplate code. And indeed this boilerplate can be overkill for small, simple applications.
+I do work with these paradigms for quite some time up to today. After writing this article one thing is even more clear to me than before: To replicate pattern matching for a language like TypeScript means to introduce a lot of boilerplate code. And indeed this boilerplate can be overkill for small, simple applications.
 
 My personal experience proofs for myself that exactly this boilerplate can help to mitigate risks and potential bugs as a code base grows, developers hop on and off and requirements increase in their complexity.
 
