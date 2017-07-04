@@ -150,7 +150,7 @@ const is1Larger = isLargerThanThree(1); // is1Larger === false
 
 This fulfills the last point in our requirement list to implement the matcher once for different types. The final example will probably never make it to production code but it demonstrates the basic mechanic how a pattern and a corresponding matcher can be implemented in TypeScript.
 
-## Matching Union Types
+## Match Union Types
 
 [Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) are a convenient way to model more sophisticated types. Knowing what specific type you are handling can be tedious though:
 
@@ -214,11 +214,9 @@ const result = matchArgument({
 
 The big advantage of this solution plays once I have to modify the `Argument` type again: I Simply adapt  `ArgumentPattern` accordingly and TypeScript will light up all code occurrences where action needs to be taken. A consistent evaluation of a union type becomes much easier this way.
 
-## Solve a real life problem
+## Real Life Problem Domain
 
-Following code is a simple start on the replication of Haskell's [Maybe monad](http://learnyouahaskell.com/a-fistful-of-monads) and uses pattern matching to provide access to the monads value.
-
-Various techniques introduced above are applied to a more complex type structure:
+Following final example takes techniques introduced earlier and applies them to a more real live alike problem domain. An imaginative cash register application provides different ways how a customer can pay his bill. This requirement is modelled using the `Payment` type and two specializations `CreditCardPayment` and `CashPayment`. A `PaymentPattern` interface is implemented along with those types:
 
 ```typescript
 interface PaymentPattern<T> {
@@ -256,15 +254,17 @@ class CashPayment extends Payment {
 }
 ```
 
-You may notice the absence of a distinct `matchMaybe` function here.
+You may notice the absence of a distinct `matchPayment` function when comparing to former examples. This slightly different approach uses a `PaymentMatcher` interface and a pinch of polymorphism magic instead.
 
-This slightly different approach uses the `MaybeMatcher` interface which gets implemented by each type on its own. Doing so prevents a set of cumbersome and potentially harmful `instanceof` compares within a dedicated matcher function and allows the invocation of matcher function directly on the concrete type:
+Doing so prevents a set of cumbersome and potentially harmful `instanceof` compares by baking `PaymentMatcher` into the abstract `Payment` base type. Each specialized payment implements `PaymentMatcher.match` then on its own.
+
+The matcher function is called on the concrete type now. `calculatePaymentAmount` showcases this by applying different calculation strategies depending on what kind of payment is processed:
 
 ```typescript
 function calculatePaymentAmount(payment: Payment) {
   return payment.match({
-    CreditCard: card => card.amount + (card.amount * card.fee),
-    Cash: cash => cash.amount - cash.discount
+    CreditCard: (card) => card.amount + (card.amount * card.fee),
+    Cash: (cash) => cash.amount - cash.discount
   });
 }
 
@@ -276,6 +276,8 @@ const cashPayment = new CashPayment(100, 2);
 const cashAmount = calculatePaymentAmount(cashPayment);
 // cashPayment === 98
 ```
+
+An obvious extension might be the introduction of an additional payment type or the change of an existing calculation strategy. Each of those are nicely secured by compile time checks which help to minimize the potential for new bugs.
 
 ## Conclusion
 
