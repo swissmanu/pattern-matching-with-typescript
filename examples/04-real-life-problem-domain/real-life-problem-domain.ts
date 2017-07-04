@@ -34,7 +34,7 @@ export class CashPayment extends Payment {
 
 export function calculatePaymentAmount(payment: Payment) {
   return payment.match({
-    CreditCard: card => card.amount + (card.amount * card.fee),
+    CreditCard: card => card.amount + card.amount * card.fee,
     Cash: cash => cash.amount - cash.discount
   });
 }

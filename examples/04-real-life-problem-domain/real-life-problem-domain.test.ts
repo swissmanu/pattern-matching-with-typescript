@@ -3,12 +3,12 @@ import {
   CashPayment,
   CreditCardPayment,
   Payment
-} from './more-complex-types';
+} from './real-life-problem-domain';
 
 const creditCardPayment = new CreditCardPayment(100, 0.02);
 const cashPayment = new CashPayment(100, 42);
 
-describe('More Complex Types:', () => {
+describe('Real Life Problem Domain:', () => {
   describe('PaymentPattern', () => {
     it('should match a CreditCardPayment with CreditCard(card)', () => {
       const cardSpy = jest.fn();
@@ -39,7 +39,9 @@ describe('More Complex Types:', () => {
 
   describe('calculatePaymentAmount()', () => {
     it('should add fees multiplied with amount to amount for credit card payments', () => {
-      const finalAmount = creditCardPayment.amount + (creditCardPayment.amount * creditCardPayment.fee);
+      const finalAmount =
+        creditCardPayment.amount +
+        creditCardPayment.amount * creditCardPayment.fee;
       expect(calculatePaymentAmount(creditCardPayment)).toEqual(finalAmount);
     });
 
