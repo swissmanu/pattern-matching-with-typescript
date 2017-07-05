@@ -212,7 +212,7 @@ The big advantage of this solution plays once I have to modify the `Argument` ty
 
 ## Real Life Problem Domain
 
-Following final example takes techniques introduced earlier and applies them to a more real live alike problem domain. An imaginative cash register application provides different ways how a customer can pay his bill. This requirement is modelled using the `Payment` type and two specializations `CreditCardPayment` and `CashPayment`. A `PaymentPattern` interface is implemented along with those types:
+Following final example takes techniques introduced earlier and applies them to a more real live alike problem domain. An imaginative cash register application provides different ways how a customer can pay his bill. This requirement is modeled using the `Payment` type and two specializations `CreditCardPayment` and `CashPayment`. A `PaymentPattern` interface is implemented along with those types:
 
 ```typescript
 interface PaymentPattern<T> {
@@ -277,7 +277,7 @@ An obvious extension might be the introduction of an additional payment type or 
 
 ## Conclusion
 
-The presented solution to bring pattern matching to TypeScript based applications is a powerful way to keep growing code bases better maintainable. It is a tool to keep code duplication low and keep conditions separated from actual behavior. Better readable code is an additional side effect.
+The presented solution to bring pattern matching to TypeScript based applications is a powerful way to keep growing code bases better maintainable. It is a tool to keep code duplication low and keep conditions separated from actual behavior. More readable code is an additional side effect.
 
 I do work with these paradigms for quite some time up to today. After writing this article one thing is even more clear to me than before: To replicate pattern matching for a language like TypeScript means to introduce a lot of boilerplate code. And indeed this boilerplate can be overkill for small, simple applications.
 
@@ -289,4 +289,4 @@ Similar to other ways of structuring code, pattern matching is no silver bullet 
 
 All code examples used in this article are available along with a [Jest](https://facebook.github.io/jest/) test suite in a complementary Github repository: https://github.com/swissmanu/pattern-matching-with-typescript
 
-Further I would like to thank [@dbrack](https://github.com/dbrack) and [@mweibel](https://github.com/mweibel) for proofreading and reviewing this article during its making. Thanks guys! ❤️
+Further, I would like to thank [@dbrack](https://github.com/dbrack) and [@mweibel](https://github.com/mweibel) for proofreading and reviewing this article during its making. Thank you, guys! ❤️
