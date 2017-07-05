@@ -287,6 +287,6 @@ Similar to other ways of structuring code, pattern matching is no silver bullet 
 
 ## Repository & Credits
 
-All code examples used in this article are available along with a [Jest](https://facebook.github.io/jest/) test suite in a complementary Github repository: https://github.com/swissmanu/pattern-matching-with-typescript
+All code examples used in this article are available along with a [Jest](https://facebook.github.io/jest/) test suite in a complementary Github repository: [https://github.com/swissmanu/pattern-matching-with-typescript](https://github.com/swissmanu/pattern-matching-with-typescript)
 
 Further, I would like to thank [@dbrack](https://github.com/dbrack) and [@mweibel](https://github.com/mweibel) for proofreading and reviewing this article during its making. Thank you, guys! ❤️
