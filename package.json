@@ -1,8 +1,8 @@
 {
   "name": "pattern-matching-with-typescript",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Complementary examples for the article \"Pattern Matching with TypeScript\"",
+  "private": true,
   "directories": {
     "example": "examples"
   },
