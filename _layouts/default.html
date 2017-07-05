@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,14 @@
 {% include head.html %}
 </head>
 <body>
-  <div class="container">
+  <article>
+    <header>
+      <img src="assets/title.png" alt="{{ site.title }}" />
+      <h1>{{ site.articleTitle }}</h1>
+      <span class="author">by <a href="https://alabor.me" rel="author" title="Author">Manuel Alabor</a></span>
+    </header>
     {{ content }}
-  </div>
+  </article>
 {% include scripts.html %}
 </body>
 </html>

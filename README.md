@@ -1,7 +1,3 @@
-# Pattern Matching with TypeScript
-
-// TODO Pretty Intro Image
-
 [TypeScript](https://www.typescriptlang.org/index.html) does not have any pattern matching functionality built in. This article shows several ways how you can replicate the core of a simple pattern matcher using a few simple structures and functions within TypeScript.
 
 Resulting code will have improved maintainability and better runtime type safety when done right.
