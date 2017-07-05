@@ -24,7 +24,7 @@
       "js"
     ],
     "transform": {
-      "^.+\\.(ts)$": "<rootDir>/examples/util/ts-preprocessor.js"
+      "^.+\\.(ts)$": "<rootDir>/.jest/ts-preprocessor.js"
     },
     "testMatch": [
       "**/*.test.ts"
