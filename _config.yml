@@ -1,5 +1,5 @@
 # Site settings
-title: Pattern Matching with TypeScript | Manuel Alabor
+title: Pattern Matching with TypeScript by Manuel Alabor
 articleTitle: Pattern Matching with TypeScript
 description: TypeScript does not have any pattern matching functionality built in. This article shows several ways how you can replicate the core of a simple pattern matcher using a few simple structures and functions within TypeScript.
 
