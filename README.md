@@ -250,7 +250,7 @@ class CashPayment extends Payment {
 }
 ```
 
-You may notice the absence of a distinct `matchPayment` function when comparing to former examples. This slightly different approach uses a `PaymentMatcher` interface and a pinch of polymorphism magic instead.
+You may notice the absence of a distinct `matchPayment` function when comparing to former examples. This slightly different approach applies a variation of the [visitor pattern](https://sourcemaking.com/design_patterns/visitor) by using a `PaymentMatcher` interface and a pinch of polymorphism magic instead.
 
 Doing so prevents a set of cumbersome and potentially harmful `instanceof` compares by baking `PaymentMatcher` into the abstract `Payment` base type. Each specialized payment implements `PaymentMatcher.match` then on its own.
 
@@ -285,8 +285,21 @@ My personal experience proofs for myself that exactly this boilerplate can help 
 
 Similar to other ways of structuring code, pattern matching is no silver bullet either. Have it in your toolbox and apply it with care when the situation seems reasonable.
 
-## Repository & Credits
+## Repository, Discussion & Credits
 
 All code examples used in this article are available along with a [Jest](https://facebook.github.io/jest/) test suite in a complementary Github repository: [https://github.com/swissmanu/pattern-matching-with-typescript](https://github.com/swissmanu/pattern-matching-with-typescript)
 
+There is a thread on Hacker News with a discussion triggered by this article available: [Pattern Matching with TypeScript @ HN](https://news.ycombinator.com/item?id=14701869)
+
 Further, I would like to thank [@dbrack](https://github.com/dbrack) and [@mweibel](https://github.com/mweibel) for proofreading and reviewing this article during its making. Thank you, guys! ❤️
+
+## Revision Notes
+
+*05.07.2017:*
+
+* Initial publish 🎉
+
+*10.07.2017:*
+
+* Section "Real Life Problem Domain": Add reference to visitor pattern in 
+* Section "Repository, Credits & Discussion": Added link to HN discussion thread
