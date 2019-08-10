@@ -4,7 +4,7 @@
 >
 > Resulting code will have improved maintainability and better runtime type safety when done right.
 
-This is the backing repository for the article "Pattern Matching with TypeScript" published under https://pattern-matching-with-typescript.alabor.me/
+This is the backing repository for the article "Pattern Matching with TypeScript" published under https://alabor.me/2017/07/05/pattern-matching-with-typescript.html
 
 ## Examples
 
